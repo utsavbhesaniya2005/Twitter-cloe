@@ -24,6 +24,7 @@ const register = async (req, res) => {
       console.log("User already Exists try Again...");
       res.render("register", {
         isSuccess: "false",
+        activeForm: "login",
         registerSuc: "User Already Exists.",
         registerSucIcon: "🚫",
         registerSucMsg:
@@ -41,6 +42,7 @@ const register = async (req, res) => {
         console.log("User Registerd Successfully...", user);
         res.render("register", {
           isSuccess: "true",
+          activeForm : "login",
           registerSuc: "Register Successfull.",
           registerSucIcon: "✅",
           registerSucMsg: "Woohoo! You're officially part of the family! 🎉",
@@ -49,6 +51,7 @@ const register = async (req, res) => {
         console.log("Error Occur during user registration.");
         res.render("register", {
           isSuccess: "false",
+          activeForm : "register",
           registerSuc: "Registration Failed.",
           registerSucIcon: "❌",
           registerSucMsg: "Something went wrong. Please try again later.",
@@ -59,6 +62,7 @@ const register = async (req, res) => {
     console.log("Internal Server Error :- ", err);
     res.render("register", {
       isSuccess: "false",
+      activeForm : "register",
       registerSuc: "Server Error.",
       registerSucIcon: "⚠️",
       registerSucMsg: "Oops! We hit a bump. Please try again shortly.",
@@ -74,7 +78,7 @@ const login = async (req, res) => {
 
     if (!user) {
       console.log("User Not Exists Please Register...");
-      req.flash("activeForm", "signup");
+      req.flash("activeForm", "register");
       req.flash("registerSuc", "User Not Found.");
       req.flash("registerSucIcon", "🔍");
       req.flash(
@@ -107,6 +111,7 @@ const login = async (req, res) => {
         console.log("Email or Password must be wrong...");
         res.render("register", {
           isSuccess: "true",
+          activeForm : "login",
           registerSuc: "Invalid Credentials.",
           registerSucIcon: "❌",
           registerSucMsg: "Your email or password seems off. Try again!",
@@ -117,6 +122,7 @@ const login = async (req, res) => {
     console.log("Internal Server ", err);
     res.render("register", {
       isSuccess: "false",
+      activeForm : "login",
       registerSuc: "Server Error.",
       registerSucIcon: "⚠️",
       registerSucMsg: "Something went wrong. Please try again.",
