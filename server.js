@@ -7,13 +7,13 @@ const bodyParser = require('body-parser');
 const express = require("express");
 const app = express();
 const db = require('./Utils/dbConfig');
-const io = require('socket.io');
+const socketio = require('socket.io');
 const http = require('http');
 const server = http.createServer(app);
-const socket = io(server);
+const io = socketio(server);
 
 app.set('view engine', 'ejs');
-app.set('socket', socket);
+app.set('io', io);
 
 var sessionOptions = {
     secret : process.env.SESSION_KEY || 'Twitter-Clone',
@@ -37,11 +37,14 @@ app.use('/twitter-clone', routes);
 
 
 // Socket Connection
-socket.on('connection', (socket) => {
+io.on('connection', (socket) => {
     console.log("User connected with ID :- ", socket.id);
+    // socket.on('likeUpdate', (data) => {
+    //     socket.emit('likeConfirmed', { success : true });
+    // })
 
-    socket.on('disconnect', () => {
-        console.log("Client disconnected");
+    socket.on('disconnect', (reason) => {
+        console.log("Client disconnected", reason);
     });
 });
 
