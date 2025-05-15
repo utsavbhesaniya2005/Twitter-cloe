@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!-- Website - www.codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- <meta name="description" content=" Today in this blog you will learn how to create a responsive Login & Registration Form in HTML CSS & JavaScript. The blog will cover everything from the basics of creating a Login & Registration in HTML, to styling it with CSS and adding with JavaScript." /> -->
+
+    <!-- <meta name="keywords" content="Animated Login & Registration Form,Form Design,HTML and CSS,HTML CSS JavaScript,login & registration form,login & signup form,Login Form Design,registration form,Signup Form,HTML,CSS,JavaScript,"/> -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Twitter : Login & Signup</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="../../css/register.css" />
+  </head>
+  <body>
+    <% if(registerSuc){ %>
+    <div class="toast-container" id="toast-container">
+      <div class="toast toast-style-4 toast-animation-4-in">
+        <div class="toast-icon"><%= registerSucIcon %></div>
+        <div class="toast-content">
+          <div class="toast-title"><%= registerSuc %></div>
+          <div class="toast-message"><%= registerSucMsg %></div>
+        </div>
+        <button class="toast-close">&times;</button>
+        <div class="toast-progress toast-progress-animate"></div>
+      </div>
+    </div>
+    <% } %>
+
+    <section class="wrapper active">
+      <div class="form signup">
+        <header>Signup</header>
+        <form action="/twitter-clone/user/register" method="post">
+          <input type="text" name="username" placeholder="Full name" required />
+          <input
+            type="text"
+            name="email"
+            placeholder="Email address"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <div class="checkbox">
+            <input type="checkbox" id="signupCheck" />
+            <label for="signupCheck">I accept all terms & conditions</label>
+          </div>
+          <span class="text-white d-block w-100 text-center"
+            >Already have an account?
+            <a
+              class="loginBtn text-warning"
+              style="
+                text-decoration: none;
+                cursor: pointer;
+                font-size: 20px;
+                font-weight: 500;
+              "
+              >Login</a
+            >
+            Here</span
+          >
+          <input type="submit" value="Signup" />
+        </form>
+      </div>
+
+      <div class="form login">
+        <header>Login</header>
+        <form
+          action="/twitter-clone/user/login"
+          method="post"
+          style="margin-bottom: 25px !important"
+        >
+          <input
+            type="text"
+            name="email"
+            placeholder="Email address"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <a href="#">Forgot password?</a>
+          <input type="submit" value="Login" />
+        </form>
+        <span class="text-black d-block w-100 text-center"
+          >Dont't have an account?
+          <a class="signupBtn" style="text-decoration: none; cursor: pointer"
+            >Register</a
+          >
+          Here</span
+        >
+      </div>
+    </section>
+
+    <script>
+          const wrapper = document.querySelector(".wrapper"),
+            signupHeader = document.querySelector(".signup header"),
+            loginHeader = document.querySelector(".login header"),
+            signupBtn = document.querySelector(".signupBtn"),
+            loginBtn = document.querySelector(".loginBtn");
+
+          loginHeader.addEventListener("click", () => {
+            wrapper.classList.add("active");
+          });
+          loginBtn.addEventListener("click", () => {
+            wrapper.classList.add("active");
+          });
+          signupHeader.addEventListener("click", () => {
+            wrapper.classList.remove("active");
+          });
+          signupBtn.addEventListener("click", () => {
+            wrapper.classList.remove("active");
+          });
+
+          <% if(isSuccess === 'true'){ %>
+            wrapper.classList.add("active");
+          <% }else if(isSuccess === 'false'){ %>
+            wrapper.classList.remove("active");
+          <% }else{ %>
+            wrapper.classList.add("active");
+          <% } %>
+
+          <% if (activeForm === 'signup') { %>
+            wrapper.classList.remove("active"); // show Signup
+          <% } else { %>
+            wrapper.classList.add("active"); // show Login by default
+          <% } %>
+    </script>
+
+    <!-- Toast Script -->
+    <script>
+      console.log('registerMSG', <%- JSON.stringify(registerSuc) %>);
+
+      if (<%- JSON.stringify(registerSuc) %>) {
+        const toast = document.getElementById('toast-container');
+        toast.style.display = 'block';
+
+        setTimeout(() => {
+          toast.classList.add('toast-animation-out');
+          setTimeout(() => toast.remove(), 1000);
+        }, 4000);
+
+        // Manual close button
+        document.querySelector('.toast-close').addEventListener('click', () => {
+          toast.remove();
+        });
+      }
+    </script>
+  </body>
+</html>
