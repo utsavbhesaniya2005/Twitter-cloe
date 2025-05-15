@@ -1,298 +1,376 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twitter - Home</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Twitter - Home</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+    />
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-    crossorigin="anonymous" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous" />
-  <link rel="stylesheet" href="../../css/style.css" />
-</head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
 
-<body>
-  <% if((loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg)){ %>
-    <div class="toast-container" id="toast-container">
-      <div class="toast toast-style-4 toast-animation-4-in">
-        <div class="toast-icon">
-          <%= loginSucIcon || addTweetIcon %>
-        </div>
-        <div class="toast-content">
-          <div class="toast-title">
-            <%= loginSuc || addTweetSuc %>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+  <body>
+
+    <% if((loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg)){ %>
+      <div class="toast-container" id="toast-container">
+        <div class="toast toast-style-4 toast-animation-4-in">
+          <div class="toast-icon"><%= loginSucIcon || addTweetIcon  %></div>
+          <div class="toast-content">
+            <div class="toast-title"><%= loginSuc || addTweetSuc %></div>
+            <div class="toast-message"><%= loginSucMsg || addTweetSucMsg %></div>
           </div>
-          <div class="toast-message">
-            <%= loginSucMsg || addTweetSucMsg %>
-          </div>
+          <button class="toast-close">&times;</button>
+          <div class="toast-progress toast-progress-animate"></div>
         </div>
-        <button class="toast-close">×</button>
-        <div class="toast-progress toast-progress-animate"></div>
       </div>
-    </div>
     <% } %>
 
-      <div class="main-container">
-        <!-- Sidebar (unchanged) -->
-        <div class="sidebar">
-          <div class="flex justify-between w-100">
-            <div class="twitter-icon cursor-pointer">
-              <i class="fab fa-twitter"></i>
-            </div>
-            <div class="toggle cursor-pointer">
-              <i class="fas fa-bars"></i>
-            </div>
+    <div class="main-container">
+      <!-- sidebar starts -->
+      <div class="sidebar">
+        <div class="flex justify-between w-100">
+          <div class="twitter-icon cursor-pointer">
+            <i class="fab fa-twitter"></i>
           </div>
-          <div class="sidebarOption active">
-            <span class="material-icons"> home </span>
-            <h2 class="sidebar-title">Home</h2>
+          <div class="toggle cursor-pointer">
+            <i class="fas fa-bars"></i>
           </div>
-          <!-- ... other sidebar options ... -->
-          <button class="sidebar__tweet">Tweet</button>
         </div>
 
-        <!-- Feed -->
-        <div class="feed">
-          <div class="feed__header">
-            <h2>Home</h2>
-          </div>
+        <div class="sidebarOption active">
+          <span class="material-icons"> home </span>
+          <h2 class="sidebar-title">Home</h2>
+        </div>
 
-          <!-- Tweetbox -->
-          <div class="tweetBox">
-            <form action="/twitter-clone/home/add" enctype="multipart/form-data" method="post">
-              <div class="tweetbox__input align-items-start">
+        <div class="sidebarOption">
+          <span class="material-icons"> search </span>
+          <h2 class="sidebar-title">Explore</h2>
+        </div>
+
+        <div class="sidebarOption">
+          <span class="material-icons"> notifications_none </span>
+          <h2 class="sidebar-title">Notifications</h2>
+        </div>
+
+        <div class="sidebarOption">
+          <span class="material-icons"> mail_outline </span>
+          <h2 class="sidebar-title">Messages</h2>
+        </div>
+
+        <div class="sidebarOption">
+          <span class="material-icons"> bookmark_border </span>
+          <h2 class="sidebar-title">Bookmarks</h2>
+        </div>
+
+        <div class="sidebarOption">
+          <span class="material-icons"> list_alt </span>
+          <h2 class="sidebar-title">Lists</h2>
+        </div>
+
+        <div class="sidebarOption">
+          <span class="material-icons"> perm_identity </span>
+          <h2 class="sidebar-title">Profile</h2>
+        </div>
+
+        <div class="sidebarOption">
+          <span class="material-icons"> more_horiz </span>
+          <h2 class="sidebar-title">More</h2>
+        </div>
+        <button class="sidebar__tweet">Tweet</button>
+      </div>
+      <!-- sidebar ends -->
+
+      <!-- feed starts -->
+      <div class="feed">
+        <div class="feed__header">
+          <h2>Home</h2>
+        </div>
+
+        <!-- tweetbox starts -->
+        <div class="tweetBox">
+          <form action="/twitter-clone/home/add" enctype="multipart/form-data" method="post">
+            <div class="tweetbox__input align-items-start">
+              <img
+                src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
+                alt=""
+              />
+              <textarea type="text" rows="6" placeholder="What's happening?" name="desc"></textarea>
+
+              <div class="d-flex flex-column align-items-center gap-3">
+                <div class="file-input">
+                  <input
+                    type="file"
+                    name="tweetImg"
+                    id="file-input"
+                    class="file-input__input"
+                  />
+                  <label class="file-input__label" for="file-input">
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      data-prefix="fas"
+                      data-icon="upload"
+                      class="svg-inline--fa fa-upload fa-w-16"
+                      role="img"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"
+                      ></path>
+                    </svg>
+                    <span>Upload Media</span>
+                  </label>
+                </div>
+
                 <img
-                  src="<%= user.avatar || 'https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png' %>"
-                  alt="User Avatar" />
-                <textarea type="text" rows="6" placeholder="What's happening?" name="desc"></textarea>
-                <div class="d-flex flex-column align-items-center gap-3">
-                  <div class="file-input">
-                    <input type="file" name="tweetImg" id="file-input" class="file-input__input" accept="image/*" />
-                    <label class="file-input__label" for="file-input">
-                      <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload"
-                        class="svg-inline--fa fa-upload fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512">
-                        <path fill="currentColor"
-                          d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z">
-                        </path>
-                      </svg>
-                      <span>Upload Media</span>
-                    </label>
-                  </div>
-                  <img src="" alt="Tweet Image Preview" width="100"
-                    style="border-radius: 0 !important; height: 80px !important; display: none;" id="preview-image" />
-                </div>
-              </div>
-              <input type="submit" class="tweetBox__tweetButton" value="Tweet" />
-            </form>
-          </div>
-
-          <!-- Posts (unchanged) -->
-          <% tweets.forEach((tweet)=> { %>
-            <div class="post">
-              <div class="post__avatar">
-                <img src="<%= tweet.user.avatar || '../../images/default-user.jpg' %>" alt="Profile Image" />
-              </div>
-              <div class="post__body">
-                <div class="post__header">
-                  <div class="post__headerText">
-                    <h3>
-                      <%= tweet.user.username %>
-                        <span class="post__headerSpecial">
-                          <span class="material-icons post__badge">verified</span>@<%= tweet.user.username %>
-                        </span>
-                    </h3>
-                  </div>
-                  <div class="post__headerDescription">
-                    <p>
-                      <%= tweet.desc %>
-                    </p>
-                  </div>
-                </div>
-                <% if (tweet.tweetImg) { %>
-                  <img src="<%= tweet.tweetImg %>" alt="Tweet Image" class="tweetImage" />
-                  <% } %>
-                    <div class="post__footer">
-                      <div class="post-utilities d-flex align-items-center cursor-pointer">
-                        <span class="material-icons">repeat</span>
-                        <h6 class="text-black mb-0 ms-2" style="font-size: 18px">
-                          <%= tweet.retweetCount %>
-                        </h6>
-                      </div>
-                      <div class="post-utilities d-flex align-items-center cursor-pointer">
-                        <a href="#" class="heartIcon <%= likedTweetIds.includes(tweet._id.toString()) ? 'liked' : '' %>"
-                          data-tweet-id="<%= tweet._id %>">
-                          <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" viewBox="0 0 24 24" fill="none"
-                            stroke="black" stroke-width="2" class="heartIconSvg">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-                                2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
-                                C13.09 3.81 14.76 3 16.5 3
-                                19.58 3 22 5.42 22 8.5
-                                c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                          </svg>
-                        </a>
-                        <h6 class="text-black mb-0 ms-2 like-count" style="font-size: 18px"
-                          data-tweet-id="<%= tweet._id %>">
-                          <%= tweet.likeCount %>
-                        </h6>
-                      </div>
-                      <div class="post-utilities d-flex align-items-center cursor-pointer">
-                        <span class="material-icons">comment</span>
-                        <h6 class="text-black mb-0 ms-2" style="font-size: 18px">0</h6>
-                      </div>
-                    </div>
+                  src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
+                  alt="Tweet Image"
+                  width="100"
+                  style="border-radius: 0 !important; height: 80px !important"
+                  id="preview-image"
+                />
               </div>
             </div>
-            <% }) %>
+            <input type="submit" class="tweetBox__tweetButton"></input>
+          </form>
+        </div>
+        <!-- tweetbox ends -->
+
+        <!-- post starts -->
+        <% tweets.forEach((tweet) => { %>
+          <div class="post">
+            <div class="post__avatar">
+              <img
+                src="<%= tweet.user.avatar ? tweet.user.avatar : '../../images/default-user.jpg' %>"
+                alt="Profile Image"
+              />
+            </div>
+  
+            <div class="post__body">
+              <div class="post__header">
+                <div class="post__headerText">
+                  <h3>
+                    <%= tweet.user.username %>
+                    <span class="post__headerSpecial"
+                      ><span class="material-icons post__badge"> verified </span
+                      >@somanathg</span
+                    >
+                  </h3>
+                </div>
+                <div class="post__headerDescription">
+                  <p><%= tweet.desc %></p>
+                </div>
+              </div>
+              <img
+                src="<%= tweet.tweetImg ? tweet.tweetImg : '../../images/default.jpg' %>"
+                alt="Tweet Image" id="tweetImage" />
+              <div class="post__footer">
+                <div class="post-utilities d-flex align-items-center cursor-pointer" >
+                  <span class="material-icons"> repeat </span>
+                  <h6 class="text-black mb-0 ms-2" style="font-size: 18px">5</h6>
+                </div>
+                  <div class="post-utilities d-flex align-items-center cursor-pointer" >
+                    <a href="#" class="heartIcon <%= likedTweetIds.includes(tweet._id.toString()) ? 'liked' : '' %>" data-tweet-id="<%= tweet._id %>">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="22" width="22" viewBox="0 0 24 24"
+                        fill="none" stroke="black" stroke-width="2" class="heartIconSvg">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                                  2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                                  C13.09 3.81 14.76 3 16.5 3
+                                  19.58 3 22 5.42 22 8.5
+                                  c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                      </svg>
+                    </a>
+                    <h6 class="text-black mb-0 ms-2" style="font-size: 18px">
+                      <%= tweet.likeCount %>
+                    </h6>
+                  </div>
+                <div class="post-utilities d-flex align-items-center cursor-pointer" >
+                  <span class="material-icons"> comment </span>
+                  <h6 class="text-black mb-0 ms-2" style="font-size: 18px">15</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+        <!-- post ends -->
+      </div>
+      <!-- feed ends -->
+
+      <!-- widgets starts -->
+      <div class="widgets">
+        <div class="widgets__input">
+          <span class="material-icons widgets__searchIcon"> search </span>
+          <input type="text" placeholder="Search Twitter" />
         </div>
 
-        <!-- Widgets (unchanged) -->
-        <div class="widgets">
-          <div class="widgets__input">
-            <span class="material-icons widgets__searchIcon">search</span>
-            <input type="text" placeholder="Search Twitter" />
-          </div>
-          <div class="widgets__widgetContainer">
-            <h2>What's happening?</h2>
-            <blockquote class="twitter-tweet">
-              <p lang="en" dir="ltr">
-                Sunsets don't get much better than this one over
-                <a href="https://twitter.com/GrandTetonNPS?ref_src=twsrc%5Etfw">@GrandTetonNPS</a>.
-                <a href="https://twitter.com/hashtag/nature?src=hash&ref_src=twsrc%5Etfw">#nature</a>
-                <a href="https://twitter.com/hashtag/sunset?src=hash&ref_src=twsrc%5Etfw">#sunset</a>
-                <a href="http://t.co/YuKy2rcjyU">pic.twitter.com/YuKy2rcjyU</a>
-              </p>
-              — US Department of the Interior (@Interior)
-              <a href="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw">May 5, 2014</a>
-            </blockquote>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-          </div>
+        <div class="widgets__widgetContainer">
+          <h2>What's happening?</h2>
+          <blockquote class="twitter-tweet">
+            <p lang="en" dir="ltr">
+              Sunsets don&#39;t get much better than this one over
+              <a href="https://twitter.com/GrandTetonNPS?ref_src=twsrc%5Etfw"
+                >@GrandTetonNPS</a
+              >.
+              <a
+                href="https://twitter.com/hashtag/nature?src=hash&amp;ref_src=twsrc%5Etfw"
+                >#nature</a
+              >
+              <a
+                href="https://twitter.com/hashtag/sunset?src=hash&amp;ref_src=twsrc%5Etfw"
+                >#sunset</a
+              >
+              <a href="http://t.co/YuKy2rcjyU">pic.twitter.com/YuKy2rcjyU</a>
+            </p>
+            &mdash; US Department of the Interior (@Interior)
+            <a
+              href="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw"
+              >May 5, 2014</a
+            >
+          </blockquote>
+          <script
+            async
+            src="https://platform.twitter.com/widgets.js"
+            charset="utf-8"
+          ></script>
         </div>
       </div>
+      <!-- widgets ends -->
+    </div>
+  </body>
 
-      <!-- Scripts -->
-      <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-      <script src="../../js/jquery.min.js"></script>
+  <!-- Socket Io CDN -->
+  <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
 
-      <!-- Sidebar Toggle -->
-      <script>
-        $(document).ready(function () {
-          console.log('jQuery loaded:', typeof $ !== 'undefined');
-          $('.toggle').click(function () {
-            $('.sidebar').addClass('active');
-            $('.sidebar-title').animate({ marginLeft: '+=250px' }, 500);
-          });
-          $('.twitter-icon').click(function () {
-            $('.sidebar').removeClass('active');
-            $('.sidebar-title').animate({ marginLeft: '0' }, 400);
-          });
-        });
-      </script>
+  <!-- Jquery cdn -->
+  <script src="../../js/jquery.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      console.log("jQuery loaded:", typeof $ !== "undefined");
 
-      <!-- Image Preview -->
-      <script>
-        document.getElementById('file-input').addEventListener('change', function (event) {
-          const file = event.target.files[0];
-          const imgPreview = document.getElementById('preview-image');
-          if (file) {
-            imgPreview.src = URL.createObjectURL(file);
-            imgPreview.style.display = 'block';
-          } else {
-            imgPreview.src = '';
-            imgPreview.style.display = 'none';
-          }
-        });
-      </script>
-
-      <!-- Handle Like -->
-      <script>
-        document.querySelectorAll('.heartIcon').forEach((heartIcon) => {
-          heartIcon.addEventListener('click', function (event) {
-            event.preventDefault();
-            const tweetId = heartIcon.dataset.tweetId;
-            const isLiked = heartIcon.classList.contains('liked');
-            const countElement = heartIcon.nextElementSibling;
-
-            fetch('/twitter-clone/home/likes', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ tweetId, action: isLiked ? 'decrement' : 'increment' }),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                if (data.success) {
-                  heartIcon.classList.toggle('liked');
-                  countElement.textContent = data.likeCount;
-                } else {
-                  console.error('Error updating like:', data.message);
-                }
-              })
-              .catch((error) => {
-                console.error('Error updating like:', error);
-              });
-          });
-        });
-      </script>
-
-      <!-- Toast -->
-      <script>
-        const showToast = <% - JSON.stringify((loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg)) %>;
-        if (showToast) {
-          const toastContainer = document.getElementById('toast-container');
-          const toast = document.querySelector('.toast');
-          toastContainer.style.display = 'block';
-          setTimeout(() => {
-            toast.classList.remove('toast-animation-4-in');
-            toast.classList.add('toast-animation-4-out');
-            setTimeout(() => toast.remove(), 1000);
-          }, 4000);
-          document.querySelector('.toast-close').addEventListener('click', () => {
-            toast.remove();
-          });
-        }
-      </script>
-
-      <!-- Socket.IO -->
-      <!-- <script>
-      const socket = io();
-      socket.on('connect', () => {
-        console.log('Connected to Socket.IO server');
+      $(".toggle").click(function () {
+        $(".sidebar").addClass("active");
+        $(".sidebar-title").animate({ marginLeft: "+=250px" }, 500);
       });
-      socket.on('likeUpdate', ({ tweetId, userId, likeCount, action }) => {
-        const heartIcon = document.querySelector(`.heartIcon[data-tweet-id="${tweetId}"]`);
-        const likeCountElement = document.querySelector(`.like-count[data-tweet-id="${tweetId}"]`);
-        if (heartIcon && likeCountElement) {
-          likeCountElement.textContent = likeCount;
-          // Optionally update 'liked' class if userId matches (requires userId in frontend)
+
+      $(".twitter-icon").click(function () {
+        $(".sidebar").removeClass("active");
+        $(".sidebar-title").animate({ marginLeft: "0" }, 400);
+      });
+    });
+  </script>
+
+  <!-- Image Show Script -->
+  <script>
+    document
+      .getElementById("file-input")
+      .addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          const imgPreview = document.getElementById("preview-image");
+          imgPreview.src = URL.createObjectURL(file);
         }
       });
-    </script> -->
-      <!-- Socket.IO -->
-      <script>
-        const socket = io();
-        const currentUserId = '<%= userId %>'; // Get userId from EJS
-        socket.on('connect', () => {
-          console.log('Connected to Socket.IO server');
-        });
-        console.log(currentUserId);
-        socket.on('likeUpdate', ({ tweetId, userId, likeCount, action }) => {
-          const heartIcon = document.querySelector(`.heartIcon[data-tweet-id="${tweetId}"]`);
-          const likeCountElement = document.querySelector(`.like-count[data-tweet-id="${tweetId}"]`);
-          if (heartIcon && likeCountElement) {
-            likeCountElement.textContent = likeCount;
-            if (userId === currentUserId) {
-              heartIcon.classList.toggle('liked', action === 'increment');
-            }
-          }
-        });
-      </script>
-</body>
+  </script>
 
+  <!-- Handle Like -->
+  <script>
+    document.querySelectorAll('.heartIcon').forEach(heartIcon => {
+
+      heartIcon.addEventListener('click', function (event) {
+
+        event.preventDefault();
+
+        const tweetId = heartIcon.dataset.tweetId;
+        const isLiked = heartIcon.classList.contains('liked');
+        const countElement = heartIcon.nextElementSibling;
+
+        fetch('/twitter-clone/home/likes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tweetId: tweetId, action: isLiked ? 'decrement' : 'increment' })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            heartIcon.classList.toggle('liked'); 
+            countElement.textContent = data.likeCount; 
+          }
+        })
+        .catch(error => {
+          console.error('Error updating like:', error);
+        });
+      });
+    });
+  </script>
+
+  <!-- Toast Script -->
+  <script>
+    const loginSuc = <%- JSON.stringify(loginSuc || null) %>;
+    const loginSucIcon = <%- JSON.stringify(loginSucIcon || null) %>;
+    const loginSucMsg = <%- JSON.stringify(loginSucMsg || null) %>;
+
+    const addTweetSuc = <%- JSON.stringify(addTweetSuc || null) %>;
+    const addTweetIcon = <%- JSON.stringify(addTweetIcon || null) %>;
+    const addTweetSucMsg = <%- JSON.stringify(addTweetSucMsg || null) %>;
+
+    const showToast = (loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg );
+
+    if (showToast) {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.querySelector('.toast');
+      toastContainer.style.display = 'block'; 
+
+      setTimeout(() => {
+        toast.classList.remove('toast-animation-4-in');
+        toast.classList.add('toast-animation-4-out'); 
+        setTimeout(() => toast.remove(), 1000); 
+      }, 4000);
+
+      document.querySelector('.toast-close').addEventListener('click', () => {
+        toast.remove();
+      });
+    }
+  </script>
+
+  <!-- Socket IO -->
+
+  <script>
+    const socket = io();
+
+    socket.on('likeUpdate', ({ tweetId, userId, likeCount }) => {
+
+      const likeIcon = document.querySelector(`.heartIcon[data-tweet-id='${tweetId}'] `);
+
+      console.log('likeIcon', likeIcon);
+
+      if(likeIcon){
+
+        const likeCounts = likeIcon.nextElementSibling;
+        likeCounts.textContent = likeCount;
+      }
+    });
+  </script>
 </html>
