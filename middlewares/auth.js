@@ -4,17 +4,19 @@ const auth = (req, res, next) => {
   const token = req.session.token;
 
   if (token) {
-    console.log(token);
 
     try {
+
       const decodeToken = jwt.verify(token, process.env.JSONPRIVATEKEY);
 
-      console.log("Decoded Token", decodeToken);
-
       if (decodeToken) {
+
+        req.session.sessionUser = decodeToken;
         req.user = decodeToken;
         next();
+
       } else {
+
         console.log("Invalid token. Authentication is required...");
         req.flash("activeForm", "login");
         req.flash("registerSuc", "Invalid Token.");
@@ -26,6 +28,7 @@ const auth = (req, res, next) => {
         res.redirect("/twitter-clone/user/register");
       }
     } catch (err) {
+
       console.log("Error verifying token:", error);
       req.flash("activeForm", "login");
       req.flash("registerSuc", "Authentication Failed.");

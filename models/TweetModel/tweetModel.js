@@ -1,29 +1,40 @@
 const mongoose = require("mongoose");
 
+const commentSchema = new mongoose.Schema(
+  {
+    commentMsg: { type: String, required: true },
+    userId: { type: mongoose.Schema.ObjectId, required: true, ref: "users" }
+  },
+  { timestamps: true },
+);
+
 const tweetSchema = new mongoose.Schema(
   {
     desc: {
       type: String,
       required: true,
     },
-    tweetImg : {
-        type : String,
-    },  
-    user : {
-        type : mongoose.Schema.ObjectId,
-        required : true,
-        ref : 'users',
+    tweetImg: {
+      type: String,
     },
-    likeCount : {
-        type : Number,
+    user: {
+      type: mongoose.Schema.ObjectId,
+      required: true,
+      ref: "users",
     },
-    retweetCount : {
-        type : Number,
+    likeCount: {
+      type: Number,
+      default: 0,
+    },
+    comments : [commentSchema],
+    retweetCount: {
+      type: Number,
+      default: 0,
     },
   },
-  { timestamps : true },
+  { timestamps: true }
 );
 
-const tweetModel = mongoose.model('tweets', tweetSchema);
+const tweetModel = mongoose.model("tweets", tweetSchema);
 
 module.exports = tweetModel;

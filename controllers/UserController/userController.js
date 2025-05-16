@@ -96,7 +96,6 @@ const login = async (req, res) => {
           process.env.JSONPRIVATEKEY
         );
 
-        console.log("TOken", token);
         req.session.token = token;
 
         console.log("User Login Successfully...", user);

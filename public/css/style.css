@@ -166,16 +166,6 @@ body {
   padding: 20px;
 }
 
-.heartIcon svg {
-  fill: white; 
-}
-
-.heartIcon.liked svg {
-  fill: red;
-  stroke: red;
-  transition: fill 0.3s ease, stroke 0.3s ease;
-}
-
 .sidebarOption h2 {
   font-weight: 800;
   font-size: 20px;
@@ -363,8 +353,77 @@ body {
 
 .post__footer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-top: 10px;
+}
+
+.post__footer .postButtonContainer button{
+  padding: 10px 15px;
+}
+
+.post__footer .postButtonContainer button:hover{
+  background-color: #d4edff;
+  color: var(--twitter-color);
+  border-radius: 50%;
+}
+
+.addCommentBtn{
+  display: block;
+  padding: 10px 15px;
+  font-size: 24px;
+  color: var(--twitter-background);
+  background-color: var(--twitter-color);
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.addCommentBtn:hover{
+  background-color: var(--twitter-background) !important;
+  color: var(--twitter-color) !important;
+  border: 1px solid var(--twitter-color) !important;
+}
+
+.comment-list{
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 1px solid #e6ecf0;
+  border-top: none;
+}
+
+.comment__avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.comment__body {
+  flex: 1;
+}
+
+.comment__header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #657786;
+  margin-bottom: 4px;
+}
+
+.comment__header strong {
+  color: #14171a;
+}
+
+.comment__time {
+  font-size: 12px;
+}
+
+.comment__text {
+  font-size: 15px;
+  color: #14171a;
+  line-height: 1.4;
 }
 
 .post-utilities:hover,
@@ -392,6 +451,26 @@ body {
 .post__headerDescription {
   margin-bottom: 10px;
   font-size: 15px;
+}
+
+.deletePostBtn{
+  color: #ffffff;
+  background-color: #D32F2F;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 40px;
+  font-size: 20px;
+  border: 1px solid #C2185B;
+  border-radius: 50%;
+}
+
+.deletePostBtn i{
+  transition: all 0.3s ease-in-out;
+}
+
+.deletePostBtn:hover i{
+  transform: translateY(-5px);
 }
 
 .post__body {
