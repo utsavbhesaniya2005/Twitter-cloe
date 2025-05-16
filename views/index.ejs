@@ -134,98 +134,105 @@
           <!-- tweetbox ends -->
 
           <!-- post starts -->
-          <% tweets.forEach((tweet)=> { %>
-            <div class="post" data-id="<%= tweet._id %>">
-              <div class="post__avatar">
-                <img src="<%= tweet.user.avatar ? tweet.user.avatar : '../../images/default-user.jpg' %>"
-                  alt="Profile Image" />
-              </div>
+          <div class="post-container tweetContainer">
+            <% tweets.forEach((tweet)=> { %>
+              <div class="post" data-id="<%= tweet._id %>">
+                <div class="post__avatar">
+                  <img src="<%= tweet.user.avatar ? tweet.user.avatar : '../../images/default-user.jpg' %>"
+                    alt="Profile Image" />
+                </div>
 
-              <div class="post__body">
-                <div class="post__header">
-                  <div class="post__headerText" style="display: flex; justify-content: space-between;">
-                    <h3>
-                      <%= tweet.user.username %>
-                        <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>@<%=
-                            tweet.user.username %></span>
-                    </h3>
-                    <time class="time-ago" datetime="<%= tweet.createdAt ? tweet.createdAt.toISOString() : new Date().toISOString()  %>"></time>
+                <div class="post__body">
+                  <div class="post__header">
+                    <div class="post__headerText" style="display: flex; justify-content: space-between;">
+                      <h3>
+                        <%= tweet.user.username %>
+                          <span class="post__headerSpecial"><span class="material-icons post__badge"> verified </span>@
+                            <%= tweet.user.username %>
+                          </span>
+                      </h3>
+                      <time class="time-ago"
+                        datetime="<%= tweet.createdAt ? tweet.createdAt.toISOString() : new Date().toISOString()  %>"></time>
+                    </div>
+                    <div class="post__headerDescription"
+                      style="display: flex; justify-content: space-between;margin-top: 10px;">
+                      <p>
+                        <%= tweet.desc %>
+                      </p>
+                      <a href="/twitter-clone/home/delete/<%= tweet._id %>/" class="deletePostBtn me-3">
+                        <i class="fa-solid fa-trash-can"></i>
+                      </a>
+                    </div>
                   </div>
-                  <div class="post__headerDescription"
-                    style="display: flex; justify-content: space-between;margin-top: 10px;">
-                    <p>
-                      <%= tweet.desc %>
-                    </p>
-                    <a href="/twitter-clone/home/delete/<%= tweet._id %>/" class="deletePostBtn me-3">
-                      <i class="fa-solid fa-trash-can"></i>
-                    </a>
-                  </div>
-                </div>
-                <img src="../../<%= tweet.tweetImg ? tweet.tweetImg : '../../images/default.jpg' %>" alt="Tweet Image"
-                  id="tweetImage" />
-                <div class="post__footer">
-                  <div class="postButtonContainer">
-                    <button>
-                      <i class="fa-regular fa-message"></i>
-                      <span class="mb-0 ms-2" style="font-size: 18px"><%= tweet.comments.length %></span>
-                    </button>
-                  </div>
-                  <div class="postButtonContainer">
-                    <button class="likeButton">
-                      <% const isLiked=likedTweetIds.includes(tweet._id.toString()); %>
-                        <i class="fa-heart heartIcon <%= isLiked ? 'fa-solid liked' : 'fa-regular' %>"
-                          data-tweet-id="<%= tweet._id %>" style="color: <%= isLiked ? 'red' : 'black' %>;">
-                        </i>
-                        <span class="like-count ms-2" style="font-size: 18px">
-                          <%= tweet.likeCount %>
+                  <img src="../../<%= tweet.tweetImg ? tweet.tweetImg : '../../images/default.jpg' %>" alt="Tweet Image"
+                    id="tweetImage" />
+                  <div class="post__footer">
+                    <div class="postButtonContainer">
+                      <button>
+                        <i class="fa-regular fa-message"></i>
+                        <span class="mb-0 ms-2" style="font-size: 18px">
+                          <%= tweet.comments.length %>
                         </span>
-                    </button>
-                  </div>
-                  <div class="postButtonContainer">
-                    <button>
-                      <i class="fa-solid fa-retweet"></i>
-                      <span class="mb-0 ms-2" style="font-size: 18px">0</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="comment-section mt-3 mb-2">
-                  <form action="/twitter-clone/home/comment/<%= tweet._id %>" method="post">
-                    <div class="input-handle" style="display: flex;">
-                      <input type="text" class="form-control" name="commentMsg" placeholder="Add Comment Here...">
-                      <button type="submit" class="addCommentBtn border">
-                        <i class="fa-solid fa-paper-plane"></i>
                       </button>
                     </div>
-                  </form>
-                </div>
-                <% if(tweet.comments) { %>
-                  <h4 class="mb-3" style="color: #50b7f5;">Comments :</h4>
-                  <% tweet.comments.forEach(comment=> { %>
-                    <div class="comment-list mb-4">
-                      <div class="comment__avatar">
-                        <img src="../../images/default-user.jpg" alt="User Avatar" />
-                      </div>
-                      <div class="comment__body">
-                        <div class="comment__header">
-                          <strong>@<%= comment.userId.username %></strong>
-                          <time class="comment__time" datetime="<%= comment.createdAt %>"></time>
-                        </div>
-                        <div class="comment__text" style="display: flex; justify-content: space-between;">
-                          <%= comment.commentMsg %>
-                            <a href="/twitter-clone/home/deleteComment/<%= tweet._id %>/<%= comment._id %>/" class="deletePostBtn me-3">
-                              <i class="fa-solid fa-trash-can"></i>
-                            </a>
-                        </div>
-                      </div>
+                    <div class="postButtonContainer">
+                      <button class="likeButton">
+                        <% const isLiked=likedTweetIds.includes(tweet._id.toString()); %>
+                          <i class="fa-heart heartIcon <%= isLiked ? 'fa-solid liked' : 'fa-regular' %>"
+                            data-tweet-id="<%= tweet._id %>" style="color: <%= isLiked ? 'red' : 'black' %>;">
+                          </i>
+                          <span class="like-count ms-2" style="font-size: 18px">
+                            <%= tweet.likeCount %>
+                          </span>
+                      </button>
                     </div>
-                  <% }) %>
-                <% }else { %>
-                <h6>No comment added.</h6>
-                <% } %>
+                    <div class="postButtonContainer">
+                      <button>
+                        <i class="fa-solid fa-retweet"></i>
+                        <span class="mb-0 ms-2" style="font-size: 18px">0</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="comment-section mt-3 mb-2">
+                    <form action="/twitter-clone/home/comment/<%= tweet._id %>" method="post">
+                      <div class="input-handle" style="display: flex;">
+                        <input type="text" class="form-control" name="commentMsg" placeholder="Add Comment Here...">
+                        <button type="submit" class="addCommentBtn border">
+                          <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <% if(tweet.comments) { %>
+                    <h4 class="mb-3" style="color: #50b7f5;">Comments :</h4>
+                    <% tweet.comments.forEach(comment=> { %>
+                      <div class="comment-list mb-4">
+                        <div class="comment__avatar">
+                          <img src="../../images/default-user.jpg" alt="User Avatar" />
+                        </div>
+                        <div class="comment__body">
+                          <div class="comment__header">
+                            <strong>@<%= comment.userId.username %></strong>
+                            <time class="comment__time" datetime="<%= comment.createdAt %>"></time>
+                          </div>
+                          <div class="comment__text" style="display: flex; justify-content: space-between;">
+                            <%= comment.commentMsg %>
+                              <a href="/twitter-clone/home/deleteComment/<%= tweet._id %>/<%= comment._id %>/"
+                                class="deletePostBtn me-3">
+                                <i class="fa-solid fa-trash-can"></i>
+                              </a>
+                          </div>
+                        </div>
+                      </div>
+                      <% }) %>
+                        <% }else { %>
+                          <h6>No comment added.</h6>
+                          <% } %>
+                </div>
               </div>
-            </div>
-            <% }) %>
-              <!-- post ends -->
+              <% }) %>
+          </div>
+          <!-- post ends -->
         </div>
         <!-- feed ends -->
 
@@ -267,17 +274,28 @@
 </script>
 
 
-<!-- Jquery cdn -->
-<script src="../../js/jquery.min.js"></script>
 
 <!-- Socket IO -->
 <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
   integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
 
+<!-- Jquery cdn -->
+<script src="../../js/jquery.min.js"></script>
+
 <script>
   $(document).ready(function () {
+
+    // Tweet Button Click
     $('.sidebar__tweet').click(function () {
       $('.tweetBox__tweetButton').click();
+    });
+
+    // Sidebar Open & Close 
+    $('.toggle').click(function () {
+      $('.sidebar').addClass('active');
+    });
+    $('.twitter-icon').click(function () {
+      $('.sidebar').removeClass('active');
     });
   });
 
@@ -292,6 +310,98 @@
 
     socket.on('newTweet', (tweet) => {
 
+      const tweetContainer = document.querySelector('.tweetContainer');
+      const newTweet = `
+        <div class="post" data-id="${tweet._id}">
+          <div class="post__avatar">
+            <img src="${tweet.user.avatar || '../../images/default-user.jpg'}" alt="Profile Image" />
+          </div>
+          <div class="post__body">
+            <div class="post__header">
+              <div class="post__headerText" style="display: flex; justify-content: space-between;">
+                <h3>
+                  ${tweet.user.username}
+                  <span class="post__headerSpecial">
+                    <span class="material-icons post__badge">verified</span>
+                    @${tweet.user.username}
+                  </span>
+                </h3>
+                <time class="time-ago" datetime="${tweet.createdAt || new Date().toISOString()}"></time>
+              </div>
+              <div class="post__headerDescription" style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <p>${tweet.desc}</p>
+                <a href="/twitter-clone/home/delete/${tweet._id}/" class="deletePostBtn me-3">
+                  <i class="fa-solid fa-trash-can"></i>
+                </a>
+              </div>
+            </div>
+            <img src="../../${tweet.tweetImg || 'images/default.jpg'}" alt="Tweet Image" id="tweetImage" />
+            <div class="post__footer">
+              <div class="postButtonContainer">
+                <button>
+                  <i class="fa-regular fa-message"></i>
+                  <span class="mb-0 ms-2" style="font-size: 18px">${tweet.comments?.length || 0}</span>
+                </button>
+              </div>
+              <div class="postButtonContainer">
+                <button class="likeButton">
+                  <i class="fa-heart heartIcon fa-regular" data-tweet-id="${tweet._id}" style="color: black;"></i>
+                  <span class="like-count ms-2" style="font-size: 18px">${tweet.likeCount || 0}</span>
+                </button>
+              </div>
+              <div class="postButtonContainer">
+                <button>
+                  <i class="fa-solid fa-retweet"></i>
+                  <span class="mb-0 ms-2" style="font-size: 18px">0</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      tweetContainer.insertAdjacentHTML('afterbegin', newTweet);
+
+      timeago.render(document.querySelectorAll('.time-ago'));
+    });
+
+    socket.on('removedTweetId', (tweetId) => {
+
+      const tweetContainer = document.querySelector('.tweetContainer');
+      const tweetElement = tweetContainer.querySelector(`[data-id="${tweetId}"]`);
+      if (tweetElement) {
+        tweetElement.remove();
+      }
+    });
+
+    socket.on('addComment', (tweetId, comment) => {
+      if (!comment || !comment.userId) {
+        console.warn("Comment or comment.userId is missing:", comment);
+        return;
+      }
+      
+      const tweetElement = $(`.post[data-id="${tweetId}"]`);
+      const commentSection = tweetElement.find('.comment-section');
+
+      const commentHTML = `
+          <div class="comment-list mb-4">
+            <div class="comment__avatar">
+              <img src="${comment.userId.avatar}" alt="User Avatar" />
+            </div>
+            <div class="comment__body">
+              <div class="comment__header">
+                <strong>@${comment.userId.username}</strong>
+                <time class="comment__time" datetime="${comment.createdAt}">${new Date(comment.createdAt).toLocaleString()}</time>
+              </div>
+              <div class="comment__text" style="display: flex; justify-content: space-between;">
+                ${comment.commentMsg}
+              </div>
+            </div>
+          </div>
+        `;
+
+      commentSection.after(commentHTML);
+       timeago.render(document.querySelectorAll('.comment__time'));
     });
 
     socket.on('likeUpdate', function (data) {
@@ -306,8 +416,7 @@
       }
     });
 
-    $('.likeButton').click(function () {
-
+    $(document).on('click', '.likeButton', function () {
       const button = $(this);
       const icon = button.find('.heartIcon');
       const countSpan = button.find('.like-count');
@@ -335,6 +444,7 @@
           console.error('Error updating like:', err);
         });
     });
+
   });
 </script>
 
@@ -379,7 +489,5 @@
     });
   }
 </script>
-
-
 
 </html>

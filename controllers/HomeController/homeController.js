@@ -53,6 +53,10 @@ const addTweet = async (req, res) => {
         "Your thoughts are flying high in the Twitterverse! 🌍"
       );
 
+      console.log('TWEET', tweet);
+      
+      const tweetWithUser = await tweet.populate('user', 'username avatar');
+
       const io = req.app.get("io");
       io.emit("newTweet", tweet);
 
@@ -102,17 +106,24 @@ const handleLikes = async (req, res) => {
 };
 
 const addComments = async (req, res) => {
+
   const { commentMsg } = req.body;
   const { pId } = req.params;
 
   try {
-    const tweetComment = await Tweet.findByIdAndUpdate(pId, { $push: { comments : { commentMsg, userId : req.user.id } } }, {new : true});
+    const tweetComment = await Tweet.findByIdAndUpdate(pId, { $push: { comments : { commentMsg, userId : req.user.id } } }, {new : true}).populate('comments.userId', 'username avatar');
 
     if(tweetComment){
       console.log('Comment Updated On Tweet :- ', tweetComment);
     }else{
-      console.log('Comment not updated try again sometime.');
+      console.log('Comment not updated. Try again later.');
+      return res.redirect('/twitter-clone/home/');;
     }
+
+    const latestComment = tweetComment.comments[tweetComment.comments.length - 1];
+
+    const io = req.app.get("io");
+    io.emit("addComment", { tweetId: pId, comment : latestComment });
 
     res.redirect('/twitter-clone/home/');
 
@@ -154,6 +165,9 @@ const deletePost = async (req, res) => {
   const { id } = req.params;
 
   const tweet = await Tweet.findOne({ _id: id });
+
+  const io = req.app.get("io");
+  io.emit("removedTweetId", id);
 
   fs.unlink(tweet.tweetImg, (err) => {
     if (!err) {
