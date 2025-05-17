@@ -17,6 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <link rel="stylesheet" href="../../css/style.css" />
+
 </head>
 
 <body>
@@ -193,7 +194,7 @@
                       </button>
                     </div>
                   </div>
-                  <div class="comment-section mt-3 mb-2">
+                  <div class="comment-section mt-3 mb-3">
                     <form action="/twitter-clone/home/comment/<%= tweet._id %>" method="post">
                       <div class="input-handle" style="display: flex;">
                         <input type="text" class="form-control" name="commentMsg" placeholder="Add Comment Here...">
@@ -204,9 +205,8 @@
                     </form>
                   </div>
                   <% if(tweet.comments) { %>
-                    <h4 class="mb-3" style="color: #50b7f5;">Comments :</h4>
                     <% tweet.comments.forEach(comment=> { %>
-                      <div class="comment-list mb-4">
+                      <div class="comment-list mb-4 mt-3">
                         <div class="comment__avatar">
                           <img src="../../images/default-user.jpg" alt="User Avatar" />
                         </div>
@@ -279,6 +279,38 @@
 <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
   integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
 
+<!-- Toast Script -->
+
+<script>
+    const loginSuc = <% - JSON.stringify(loginSuc || null) %>;
+    const loginSucIcon = <% - JSON.stringify(loginSucIcon || null) %>;
+    const loginSucMsg = <% - JSON.stringify(loginSucMsg || null) %>;
+
+    const addTweetSuc = <% - JSON.stringify(addTweetSuc || null) %>;
+    const addTweetIcon = <% - JSON.stringify(addTweetIcon || null) %>;
+    const addTweetSucMsg = <% - JSON.stringify(addTweetSucMsg || null) %>;
+
+    const showToast = (loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg);
+
+    if (showToast) {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.querySelector('.toast');
+      toastContainer.style.display = 'block';
+
+      setTimeout(() => {
+        toast.classList.remove('toast-animation-4-in');
+        toast.classList.add('toast-animation-4-out');
+        setTimeout(() => {
+          toast.remove();
+        }, 1000);
+      }, 4000);
+
+      document.querySelector('.toast-close').addEventListener('click', () => {
+        toast.remove();
+      });
+    }
+</script>
+
 <!-- Jquery cdn -->
 <script src="../../js/jquery.min.js"></script>
 
@@ -301,16 +333,13 @@
 
   $(document).ready(function () {
 
-    const socket = io({
-      transports: ['websocket'],
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000
-    });
+    const socket = io('http://localhost:3000');
 
+    // New Tweet Add
     socket.on('newTweet', (tweet) => {
 
       const tweetContainer = document.querySelector('.tweetContainer');
+
       const newTweet = `
         <div class="post" data-id="${tweet._id}">
           <div class="post__avatar">
@@ -356,6 +385,16 @@
                 </button>
               </div>
             </div>
+            <div class="comment-section mt-3 mb-3">
+              <form action="/twitter-clone/home/comment/${tweet._id}" method="post">
+                <div class="input-handle" style="display: flex;">
+                  <input type="text" class="form-control" name="commentMsg" placeholder="Add Comment Here...">
+                  <button type="submit" class="addCommentBtn border">
+                    <i class="fa-solid fa-paper-plane"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       `;
@@ -365,6 +404,7 @@
       timeago.render(document.querySelectorAll('.time-ago'));
     });
 
+    // Remove Tweet
     socket.on('removedTweetId', (tweetId) => {
 
       const tweetContainer = document.querySelector('.tweetContainer');
@@ -374,36 +414,58 @@
       }
     });
 
-    socket.on('addComment', (tweetId, comment) => {
-      if (!comment || !comment.userId) {
-        console.warn("Comment or comment.userId is missing:", comment);
-        return;
-      }
-      
-      const tweetElement = $(`.post[data-id="${tweetId}"]`);
-      const commentSection = tweetElement.find('.comment-section');
+    // Add Comment
+    socket.on('addComment', ({ tweetId, comment }) => {
 
-      const commentHTML = `
-          <div class="comment-list mb-4">
-            <div class="comment__avatar">
-              <img src="${comment.userId.avatar}" alt="User Avatar" />
-            </div>
-            <div class="comment__body">
-              <div class="comment__header">
-                <strong>@${comment.userId.username}</strong>
-                <time class="comment__time" datetime="${comment.createdAt}">${new Date(comment.createdAt).toLocaleString()}</time>
-              </div>
-              <div class="comment__text" style="display: flex; justify-content: space-between;">
-                ${comment.commentMsg}
-              </div>
-            </div>
+      const tweetElement = document.querySelector(`.post[data-id="${tweetId}"]`);
+
+      const commentSection = tweetElement.querySelector(".comment-section");
+
+      const commentList = document.createElement("div");
+      commentList.classList.add("comment-list", "mb-4", "mt-3");
+
+      commentList.innerHTML = `
+        <div class="comment__avatar">
+          <img src="${comment.userId.avatar || "/images/default-user.jpg"}" alt="User Avatar" />
+        </div>
+        <div class="comment__body">
+          <div class="comment__header">
+            <strong>@${comment.userId.username}</strong>
+            <time class="comment__time">${new Date(comment.createdAt).toLocaleString()}</time>
           </div>
-        `;
+          <div class="comment__text" style="display: flex; justify-content: space-between;">
+            ${comment.commentMsg}
+            <a href="/twitter-clone/home/deleteComment/${tweetId}/${comment._id}/" class="deletePostBtn me-3">
+              <i class="fa-solid fa-trash-can"></i>
+            </a>
+          </div>
+        </div>
+      `;
 
-      commentSection.after(commentHTML);
-       timeago.render(document.querySelectorAll('.comment__time'));
+      commentSection.appendChild(commentList);
+      timeago.render(document.querySelectorAll('.comment__time'));
     });
 
+    // DeleteComment
+    socket.on('deleteComment', (cId, tweetId) => {
+
+      const tweetElement = document.querySelector(`.post[data-id="${tweetId}"]`);
+
+      const commentLists = tweetElement.querySelectorAll('.comment-list');
+
+      commentLists.forEach((comment) => {
+
+        const deleteBtn = comment.querySelector(`a[href="/twitter-clone/home/deleteComment/${tweetId}/${cId}/"]`);
+        console.log(deleteBtn);
+        if (deleteBtn) {
+          comment.remove();
+        }
+      });
+
+    });
+
+
+    // Update Like
     socket.on('likeUpdate', function (data) {
       const { tweetId, likeCount } = data;
 
@@ -416,6 +478,7 @@
       }
     });
 
+    // Change Bg heartIcon
     $(document).on('click', '.likeButton', function () {
       const button = $(this);
       const icon = button.find('.heartIcon');
@@ -459,35 +522,6 @@
         imgPreview.src = URL.createObjectURL(file);
       }
     });
-</script>
-
-<!-- Toast Script -->
-<script>
-  const loginSuc = <% - JSON.stringify(loginSuc || null) %>;
-  const loginSucIcon = <% - JSON.stringify(loginSucIcon || null) %>;
-  const loginSucMsg = <% - JSON.stringify(loginSucMsg || null) %>;
-
-  const addTweetSuc = <% - JSON.stringify(addTweetSuc || null) %>;
-  const addTweetIcon = <% - JSON.stringify(addTweetIcon || null) %>;
-  const addTweetSucMsg = <% - JSON.stringify(addTweetSucMsg || null) %>;
-
-  const showToast = (loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg);
-
-  if (showToast) {
-    const toastContainer = document.getElementById('toast-container');
-    const toast = document.querySelector('.toast');
-    toastContainer.style.display = 'block';
-
-    setTimeout(() => {
-      toast.classList.remove('toast-animation-4-in');
-      toast.classList.add('toast-animation-4-out');
-      setTimeout(() => toast.remove(), 1000);
-    }, 4000);
-
-    document.querySelector('.toast-close').addEventListener('click', () => {
-      toast.remove();
-    });
-  }
 </script>
 
 </html>

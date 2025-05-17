@@ -2,6 +2,8 @@ const Tweet = require("../../models/TweetModel/tweetModel");
 const Like = require("../../models/LikeModel/likeModel");
 const fs = require("fs");
 
+var io;
+
 const dashboard = async (req, res) => {
   const allTweets = await Tweet.find({})
     .sort({ createdAt: -1 })
@@ -45,20 +47,20 @@ const addTweet = async (req, res) => {
     });
 
     if (tweet) {
+
+      const tweetWithUser = await tweet.populate('user', 'username avatar');
+      const io = req.app.get("io");
+
       console.log("Tweet Added.", tweet);
-      req.flash("addTweetSuc", "You Just Tweeted!");
+      req.flash("addTweetSuc", "You Just Tweersted!");
       req.flash("addTweetIcon", "🐦");
       req.flash(
         "addTweetSucMsg",
         "Your thoughts are flying high in the Twitterverse! 🌍"
       );
-
-      console.log('TWEET', tweet);
       
-      const tweetWithUser = await tweet.populate('user', 'username avatar');
-
-      const io = req.app.get("io");
-      io.emit("newTweet", tweet);
+      
+      io.emit("newTweet", tweetWithUser);
 
       res.redirect("/twitter-clone/home/");
     } else {
@@ -105,10 +107,10 @@ const handleLikes = async (req, res) => {
   }
 };
 
-const addComments = async (req, res) => {
+const addComments = async (req, res) => { 
 
-  const { commentMsg } = req.body;
   const { pId } = req.params;
+  const { commentMsg } = req.body;
 
   try {
     const tweetComment = await Tweet.findByIdAndUpdate(pId, { $push: { comments : { commentMsg, userId : req.user.id } } }, {new : true}).populate('comments.userId', 'username avatar');
@@ -121,7 +123,7 @@ const addComments = async (req, res) => {
     }
 
     const latestComment = tweetComment.comments[tweetComment.comments.length - 1];
-
+    
     const io = req.app.get("io");
     io.emit("addComment", { tweetId: pId, comment : latestComment });
 
@@ -144,6 +146,9 @@ const deleteComment = async (req, res) => {
         }
       },
     });
+
+    const io = req.app.get("io");
+    io.emit('deleteComment', cId, tweetId);
 
     if(removeComment){
 
