@@ -5,6 +5,7 @@ const fs = require("fs");
 var io;
 
 const dashboard = async (req, res) => {
+
   const allTweets = await Tweet.find({})
     .sort({ createdAt: -1 })
     .populate("user", "username avatar")
@@ -58,8 +59,8 @@ const addTweet = async (req, res) => {
         "addTweetSucMsg",
         "Your thoughts are flying high in the Twitterverse! 🌍"
       );
-      
-      
+
+
       io.emit("newTweet", tweetWithUser);
 
       res.redirect("/twitter-clone/home/");
@@ -107,25 +108,25 @@ const handleLikes = async (req, res) => {
   }
 };
 
-const addComments = async (req, res) => { 
+const addComments = async (req, res) => {
 
   const { pId } = req.params;
   const { commentMsg } = req.body;
 
   try {
-    const tweetComment = await Tweet.findByIdAndUpdate(pId, { $push: { comments : { commentMsg, userId : req.user.id } } }, {new : true}).populate('comments.userId', 'username avatar');
+    const tweetComment = await Tweet.findByIdAndUpdate(pId, { $push: { comments: { commentMsg, userId: req.user.id } } }, { new: true }).populate('comments.userId', 'username avatar');
 
-    if(tweetComment){
+    if (tweetComment) {
       console.log('Comment Updated On Tweet :- ', tweetComment);
-    }else{
+    } else {
       console.log('Comment not updated. Try again later.');
       return res.redirect('/twitter-clone/home/');;
     }
 
     const latestComment = tweetComment.comments[tweetComment.comments.length - 1];
-    
+
     const io = req.app.get("io");
-    io.emit("addComment", { tweetId: pId, comment : latestComment });
+    io.emit("addComment", { tweetId: pId, comment: latestComment, commentCount : tweetComment.comments.length });
 
     res.redirect('/twitter-clone/home/');
 
@@ -137,30 +138,30 @@ const addComments = async (req, res) => {
 const deleteComment = async (req, res) => {
   const { cId, tweetId } = req.params;
 
-  try{
+  try {
 
-    const removeComment = await Tweet.updateOne({ _id : tweetId }, {
-      $pull : { 
-        comments : {
-          _id : cId
+    const removeComment = await Tweet.findByIdAndUpdate(tweetId, {
+      $pull: {
+        comments: {
+          _id: cId
         }
       },
-    });
+    }, { new : true });
 
     const io = req.app.get("io");
-    io.emit('deleteComment', cId, tweetId);
+    io.emit('deleteComment', { cId, tweetId, commentCount : removeComment.comments.length });
 
-    if(removeComment){
+    if (removeComment) {
 
       console.log('Comment deleted successfully.');
-    }else{
-      
+    } else {
+
       console.log('Error : Server error while deleting the comment');
     }
 
     res.redirect('/twitter-clone/home/');
 
-  }catch(err){
+  } catch (err) {
     console.log("Internal Server Error :- ", err);
   }
 }

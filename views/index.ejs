@@ -274,42 +274,41 @@
 </script>
 
 
+<!-- Toast Script -->
+
+<script>
+  const loginSuc = <% - JSON.stringify(loginSuc || null) %>;
+  const loginSucIcon = <% - JSON.stringify(loginSucIcon || null) %>;
+  const loginSucMsg = <% - JSON.stringify(loginSucMsg || null) %>;
+
+  const addTweetSuc = <% - JSON.stringify(addTweetSuc || null) %>;
+  const addTweetIcon = <% - JSON.stringify(addTweetIcon || null) %>;
+  const addTweetSucMsg = <% - JSON.stringify(addTweetSucMsg || null) %>;
+
+  const showToast = (loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg);
+
+  if (showToast) {
+    const toastContainer = document.getElementById('toast-container');
+    const toast = document.querySelector('.toast');
+    toastContainer.style.display = 'block';
+
+    setTimeout(() => {
+      toast.classList.remove('toast-animation-4-in');
+      toast.classList.add('toast-animation-4-out');
+      setTimeout(() => {
+        toast.remove();
+      }, 1000);
+    }, 4000);
+
+    document.querySelector('.toast-close').addEventListener('click', () => {
+      toast.remove();
+    });
+  }
+</script>
 
 <!-- Socket IO -->
 <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
   integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
-
-<!-- Toast Script -->
-
-<script>
-    const loginSuc = <% - JSON.stringify(loginSuc || null) %>;
-    const loginSucIcon = <% - JSON.stringify(loginSucIcon || null) %>;
-    const loginSucMsg = <% - JSON.stringify(loginSucMsg || null) %>;
-
-    const addTweetSuc = <% - JSON.stringify(addTweetSuc || null) %>;
-    const addTweetIcon = <% - JSON.stringify(addTweetIcon || null) %>;
-    const addTweetSucMsg = <% - JSON.stringify(addTweetSucMsg || null) %>;
-
-    const showToast = (loginSuc && loginSucMsg) || (addTweetSuc && addTweetSucMsg);
-
-    if (showToast) {
-      const toastContainer = document.getElementById('toast-container');
-      const toast = document.querySelector('.toast');
-      toastContainer.style.display = 'block';
-
-      setTimeout(() => {
-        toast.classList.remove('toast-animation-4-in');
-        toast.classList.add('toast-animation-4-out');
-        setTimeout(() => {
-          toast.remove();
-        }, 1000);
-      }, 4000);
-
-      document.querySelector('.toast-close').addEventListener('click', () => {
-        toast.remove();
-      });
-    }
-</script>
 
 <!-- Jquery cdn -->
 <script src="../../js/jquery.min.js"></script>
@@ -415,7 +414,7 @@
     });
 
     // Add Comment
-    socket.on('addComment', ({ tweetId, comment }) => {
+    socket.on('addComment', ({ tweetId, comment, commentCount }) => {
 
       const tweetElement = document.querySelector(`.post[data-id="${tweetId}"]`);
 
@@ -443,11 +442,17 @@
       `;
 
       commentSection.appendChild(commentList);
+
+      const commentCountSpan = tweetElement.querySelector('.fa-message + span');
+      if (commentCountSpan) {
+        commentCountSpan.textContent = commentCount;
+      }
+
       timeago.render(document.querySelectorAll('.comment__time'));
     });
 
     // DeleteComment
-    socket.on('deleteComment', (cId, tweetId) => {
+    socket.on('deleteComment', ({ cId, tweetId, commentCount }) => {
 
       const tweetElement = document.querySelector(`.post[data-id="${tweetId}"]`);
 
@@ -462,8 +467,12 @@
         }
       });
 
-    });
+      const commentCountSpan = tweetElement.querySelector(".fa-message + span");
+      if (commentCountSpan) {
+        commentCountSpan.textContent = commentCount;
+      }
 
+    });
 
     // Update Like
     socket.on('likeUpdate', function (data) {

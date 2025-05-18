@@ -7,18 +7,10 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 const db = require("./Utils/dbConfig");
-const sockeIo = require("socket.io");
+const socketIo = require("socket.io");
 const http = require("http");
 const server = http.createServer(app);
-const io = sockeIo(server, {
-  cors: {
-    origin: "http://localhost:3000", 
-    methods: ["GET", "POST"],
-  },
-  pingTimeout: 60000, 
-  pingInterval: 25000,
-  transports: ["websocket"],
-});
+const io = socketIo(server);
 
 app.set("view engine", "ejs");
 app.set("io", io);
