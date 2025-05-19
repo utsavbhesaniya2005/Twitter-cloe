@@ -4,13 +4,12 @@ const jwt = require("jsonwebtoken");
 const flash = require("connect-flash");
 
 const signUp = (req, res) => {
-
   res.render("register", {
     isSuccess: "",
-    activeForm: req.flash('activeForm')[0],
-    registerSuc: req.flash('registerSuc')[0],
-    registerSucIcon: req.flash('registerSucIcon')[0],
-    registerSucMsg: req.flash('registerSucMsg')[0],
+    activeForm: req.flash("activeForm")[0],
+    registerSuc: req.flash("registerSuc")[0],
+    registerSucIcon: req.flash("registerSucIcon")[0],
+    registerSucMsg: req.flash("registerSucMsg")[0],
   });
 };
 
@@ -35,14 +34,14 @@ const register = async (req, res) => {
         username,
         email,
         password: await bcrypt.hash(password, 12),
-        avatar : '',
+        avatar: "",
       });
 
       if (user) {
         console.log("User Registerd Successfully...", user);
         res.render("register", {
           isSuccess: "true",
-          activeForm : "login",
+          activeForm: "login",
           registerSuc: "Register Successfull.",
           registerSucIcon: "✅",
           registerSucMsg: "Woohoo! You're officially part of the family! 🎉",
@@ -51,7 +50,7 @@ const register = async (req, res) => {
         console.log("Error Occur during user registration.");
         res.render("register", {
           isSuccess: "false",
-          activeForm : "register",
+          activeForm: "register",
           registerSuc: "Registration Failed.",
           registerSucIcon: "❌",
           registerSucMsg: "Something went wrong. Please try again later.",
@@ -62,7 +61,7 @@ const register = async (req, res) => {
     console.log("Internal Server Error :- ", err);
     res.render("register", {
       isSuccess: "false",
-      activeForm : "register",
+      activeForm: "register",
       registerSuc: "Server Error.",
       registerSucIcon: "⚠️",
       registerSucMsg: "Oops! We hit a bump. Please try again shortly.",
@@ -90,7 +89,6 @@ const login = async (req, res) => {
       const checkPass = await bcrypt.compare(password, user.password);
 
       if (checkPass) {
-        
         const token = jwt.sign(
           { id: user._id, email: user.email },
           process.env.JSONPRIVATEKEY
@@ -110,7 +108,7 @@ const login = async (req, res) => {
         console.log("Email or Password must be wrong...");
         res.render("register", {
           isSuccess: "true",
-          activeForm : "login",
+          activeForm: "login",
           registerSuc: "Invalid Credentials.",
           registerSucIcon: "❌",
           registerSucMsg: "Your email or password seems off. Try again!",
@@ -121,7 +119,7 @@ const login = async (req, res) => {
     console.log("Internal Server ", err);
     res.render("register", {
       isSuccess: "false",
-      activeForm : "login",
+      activeForm: "login",
       registerSuc: "Server Error.",
       registerSucIcon: "⚠️",
       registerSucMsg: "Something went wrong. Please try again.",
@@ -129,4 +127,14 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signUp, register, login };
+const logout = (req, res) => {
+
+  req.session.destroy((err) => {
+    if (err) console.log(err);
+    if (!err) console.log("Logout Successfully...");
+
+    res.redirect("/twitter-clone/user/register");
+  });
+};
+
+module.exports = { signUp, register, login, logout };

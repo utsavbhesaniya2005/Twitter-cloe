@@ -208,6 +208,7 @@ body {
 .sidebar {
   border-right: 1px solid var(--twitter-background);
   width: 280px;
+  height: 100vh;
   margin-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
@@ -229,6 +230,16 @@ body {
 .fa-bars {
   color: var(--twitter-color);
   font-size: 30px;
+}
+
+.logout{
+  transition: all 0.3s ease-in-out;
+}
+
+.logout:hover{
+  background-color: white !important;
+  color: red !important;
+  border: 1px solid red;
 }
 
 /* feed */
